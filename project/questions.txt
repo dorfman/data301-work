@@ -1,0 +1,6 @@
+1) Could we describe functions in Markdown instead of docstrings(""" Function description """)? 
+2) In Analysis, should I have plots for Before, After, and Diff, or just After and Diff?
+3) Division of work across notebooks
+4) Narative
+5) Bootstrap in modeling? ADD STATISTICAL MODELING
+6) Using Jupyter outside of class. More data science ideas but don't know where to use/run ipynbs
