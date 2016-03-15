@@ -1,4 +1,25 @@
+import matplotlib.pyplot as plt
 import pandas as pd
+import datetime
+
+def Equals100(polls, x=0):
+    """If the polling data sum is less than 100, add remainder to 'Undecided'. 
+       If it is greater, substract surplus from 'Undecided'. Huffpost Pollster's 
+       data uses integers instead of floats.
+       
+    Parameters
+    ----------
+    polls : DataFrame
+        Holds polling for each candidate grouped by dates.
+    x : int
+        Offset if polls not completely cleaned yet.
+    """
+    
+    for p in range(len(polls[x:])):
+        pollSum = sum(polls.iloc[p][x:].dropna())
+        if pollSum != 100:
+            polls.ix[p, 'Undecided'] += 100 - pollSum
+        pollSum = sum(polls.iloc[p][x:].dropna())
 
 def AllGreaterThan(perc, num):
     """Returns a list of candidates that gained over num percent of supporters gained.
@@ -107,3 +128,31 @@ def GenStats(PollingBeforeDrop, PollingAfterDrop, PollingDiff):
 
         statList.append(stats)
     return statList
+
+def BiWeekPolling(polls, candidates, cand):
+    """Returns a snippet of the DataFrame holding only polls conducted 7 days prior to the date of dropping to 9 after
+       the date of dropping.
+    
+    Parameters
+    ----------
+    cand : str
+        The name of the candidate that dropped out.
+    """
+    
+    return polls[(polls.index > candidates['date'][cand] - datetime.timedelta(days=7)) \
+     & (polls.index < candidates['date'][cand] + datetime.timedelta(days=9))]
+
+def PlotChart(candidates, polls, name):
+    plt.figure(figsize=(14,7))
+    for p in polls:
+        z = plt.plot(polls[p])
+        
+    plt.axvline(candidates['date'][name])
+
+    plt.title("GOP Candidate Polling a Week Before/After " + name + " Dropped", size=20)
+    plt.xlabel("Date of Poll", size=16)
+    plt.ylabel("Polling Percentage", size=16)
+    #plt.xlim('2016-01-03', '2016-03-22')
+    plt.ylim(0, 60)
+    plt.legend(fontsize=7)
+               
