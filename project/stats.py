@@ -119,6 +119,8 @@ def GenStats(PollingBeforeDrop, PollingAfterDrop, PollingDiff):
         stats['Polling Sum Positive'] = sum([b for b in stats['Polling Differences'] if b > 0])
         stats['Polling Sum Positive Percentages'] = pd.Series([0 if b < 0 else b / stats['Polling Sum Positive'] \
                                              for b in stats['Polling Differences']], stats['Polling Differences'].index)
+        stats['Polling Sum All Percentages'] = pd.Series([b / stats['Polling Sum Positive'] \
+                                             for b in stats['Polling Differences']], stats['Polling Differences'].index)
 
         stats['Winner Names'] = WinnerNames(stats['Polling Sum Positive Percentages'])
         stats['Winner Percs'] = WinnerPercs(stats['Polling Sum Positive Percentages'])[::-1] # came out backwards
@@ -152,7 +154,6 @@ def PlotChart(candidates, polls, name):
     plt.title("GOP Candidate Polling a Week Before/After " + name + " Dropped", size=20)
     plt.xlabel("Date of Poll", size=16)
     plt.ylabel("Polling Percentage", size=16)
-    #plt.xlim('2016-01-03', '2016-03-22')
     plt.ylim(0, 60)
     plt.legend(fontsize=7)
                
